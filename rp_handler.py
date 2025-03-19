@@ -41,7 +41,7 @@ def handler(event):
 
     # Placeholder for a task; replace with image or text generation logic as needed
     messages = [
-        {"role": "system", "content": "You are a accurate scene analyser who likes to conbine multiple source of information and give final verdict!"},
+        {"role": "system", "content": "You are a accurate video scene analyser who likes to conbine multiple source of information and give final verdict!"},
         {"role": "user", "content": f"{prompt}"
         f"\n\nHere is the data for your analysis:\n\n"
             f"### llama-vision data:\n{llama_vision_data}\n\n"
