@@ -77,6 +77,25 @@ def generate_smart_name(data):
     result = outputs[0]["generated_text"][-1]
     return result.get("content")
 
+
+def answer_query(user_query, best_matched_embeddings):
+    messages = [
+        {"role": "system", "content": "You are a video chatbot that answers only sensible user queries based on provided textual data extracted from video frames. Ignore garbage or nonsensical input. Extract and deliver clear, necessary information without technical terms (e.g., avoid jargon like 'YOLO model'). If relevant, include activity duration with elapsed time from the video, keeping responses short and to the point."},
+        {"role": "user", "content": f"User query: {user_query}"
+                            f"Find information from this daat:\n{best_matched_embeddings}"
+        },
+    ]
+    outputs = pipeline(
+        messages,
+        max_new_tokens=512,
+        eos_token_id=terminators,
+        do_sample=True,
+        temperature=0.6,
+        top_p=0.9,
+    )
+    result = outputs[0]["generated_text"][-1]
+    return result.get("content")
+
 def handler(event):
     input = event['input']
 
@@ -84,6 +103,9 @@ def handler(event):
         return video_description(input)
     elif input.get('task') == "smart_name":
         return generate_smart_name(input.get('llama_res'))
+    elif input.get('task') == "query":
+        return answer_query(input.get('user_query'),input.get("best_matched_embeddings"))
+
     
 
 if __name__ == '__main__':
