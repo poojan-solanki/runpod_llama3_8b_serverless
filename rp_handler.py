@@ -43,7 +43,7 @@ def handler(event):
     messages = [
         {"role": "system", "content": "You are a accurate video scene analyser who likes to conbine multiple source of information and give final verdict!"},
         {"role": "user", "content": f"{prompt}"
-        f"\n\nHere is the data for your analysis:\n\n"
+        f"\n\nHere is the data for your analysis: Take file name into consideration too it might be helpful. (elapsed means elapsed time of video)\n\n"
             f"### llama-vision data:\n{llama_vision_data}\n\n"
             f"### yolo11x-pose detection data:\n{yolo_data}\n\n"
             "Now, combine these datasets and provide the best possible output."
