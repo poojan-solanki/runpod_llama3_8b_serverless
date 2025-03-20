@@ -33,9 +33,7 @@ You will analyze data from two sources to provide a final verdict on the scene:
                 #  \n\n#### Comparison and Discrepancy Resolution ** and strictly focus on giving final verdict
 """
 
-
-def handler(event):
-    input = event['input']
+def video_description(input):
     llama_vision_data = input.get('llama_vision_data')
     yolo_data = input.get('yolo_data')
 
@@ -43,7 +41,7 @@ def handler(event):
     messages = [
         {"role": "system", "content": "You are a accurate video scene analyser who likes to conbine multiple source of information and give final verdict!"},
         {"role": "user", "content": f"{prompt}"
-        f"\n\nHere is the data for your analysis: Take file name into consideration too it might be helpful. (elapsed means elapsed time of video)\n\n"
+        f"\n\nHere is the data for your analysis: Take file name into consideration too (especially elapsed time) it might be helpful. (elapsed means elapsed time of video)\n\n"
             f"### llama-vision data:\n{llama_vision_data}\n\n"
             f"### yolo11x-pose detection data:\n{yolo_data}\n\n"
             "Now, combine these datasets and provide the best possible output."
@@ -60,6 +58,33 @@ def handler(event):
     )
     result = outputs[0]["generated_text"][-1]
     return result.get("content")
+
+def generate_smart_name(data):
+    messages = [
+        {"role": "system", "content": "you are a cool guy who likes to name things in maximum 7 words"},
+        {"role": "user", "content": "I need one smart video title about the content inside video\nno extra information:\n"
+                            f"This is data {data}"
+        },
+    ]
+    outputs = pipeline(
+        messages,
+        max_new_tokens=20,
+        eos_token_id=terminators,
+        do_sample=True,
+        temperature=0.6,
+        top_p=0.9,
+    )
+    result = outputs[0]["generated_text"][-1]
+    return result.get("content")
+
+def handler(event):
+    input = event['input']
+
+    if input.get('task') == "combine_data":
+        return video_description(input)
+    elif input.get('task') == "smart_name":
+        return generate_smart_name(input.get('llama_res'))
+    
 
 if __name__ == '__main__':
     runpod.serverless.start({'handler': handler})
