@@ -61,7 +61,7 @@ def video_description(input):
 
 def generate_smart_name(data):
     messages = [
-        {"role": "system", "content": "You are an AI assistant skilled in generating smart and creative video titles based on the content of the video. Your task is to create a concise and catchy title, no longer than 7 words, that summarizes the key theme of the video."},
+        {"role": "system", "content": "You are an AI assistant skilled in generating smart and creative video titles based on the content of the video. Your task is to create a concise and catchy title, no longer than 7 words, that summarizes the key theme of the video. Provide only the title, without any additional explanation or introduction."},
         {"role": "user", "content": "Please generate a single, smart, and engaging video title based on the following content. The title should capture the main idea and be no more than 7 words. Here is the video content:\n\n" 
                                     f"{data}"
         },
