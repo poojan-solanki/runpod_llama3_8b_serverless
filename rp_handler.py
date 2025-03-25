@@ -61,9 +61,9 @@ def video_description(input):
 
 def generate_smart_name(data):
     messages = [
-        {"role": "system", "content": "you are a cool guy who likes to name things in maximum 7 words"},
-        {"role": "user", "content": "I need one smart video title about the content inside video\nno extra information:\n"
-                            f"This is data {data}"
+        {"role": "system", "content": "You are an AI assistant skilled in generating smart and creative video titles based on the content of the video. Your task is to create a concise and catchy title, no longer than 7 words, that summarizes the key theme of the video."},
+        {"role": "user", "content": "Please generate a single, smart, and engaging video title based on the following content. The title should capture the main idea and be no more than 7 words. Here is the video content:\n\n" 
+                                    f"{data}"
         },
     ]
     outputs = pipeline(
@@ -105,6 +105,8 @@ def handler(event):
         return generate_smart_name(input.get('llama_res'))
     elif input.get('task') == "query":
         return answer_query(input.get('user_query'),input.get("best_matched_embeddings"))
+    else:
+        return "No task defined for this purpose"
 
     
 
